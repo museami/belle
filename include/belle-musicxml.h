@@ -409,7 +409,7 @@ Value MusicXMLParseAttributes(
     const Value& Attribute = Attributes[i];
     if(Attribute.Tag() == "divisions")
       PartState["divisions"] = Attribute.Val();
-    else if(Attribute.Tag() == "clef")
+    else if(Attribute.Tag() == "clef" && IsFirstAttribute)
     {
       count StaffIndex = 0;
       if(Attribute["number"].IsInteger())
@@ -417,7 +417,7 @@ Value MusicXMLParseAttributes(
           count(0)), Staves);
       CKTMatrix[0][StaffIndex] = MusicXMLParseClef(Attribute);
     }
-    else if(Attribute.Tag() == "key")
+    else if(Attribute.Tag() == "key" && IsFirstAttribute)
     {
       count StaffIndex = -1;
       if(Attribute["number"].IsInteger())
@@ -430,7 +430,7 @@ Value MusicXMLParseAttributes(
         if(StaffIndex < 0 or StaffIndex == j)
           CKTMatrix[1][j] = Key;
     }
-    else if(Attribute.Tag() == "time")
+    else if(Attribute.Tag() == "time" && IsFirstAttribute)
     {
       count StaffIndex = -1;
       if(Attribute["number"].IsInteger())
@@ -1136,12 +1136,14 @@ Value MusicXMLParseMeasureElements(const Value& Measure, Value& PartState)
         Offset -= PartState["elements"].z()["duration"].AsRatio();
         Offset = Max(Offset, Ratio(0));
       }
+#ifdef BELLE_MUSICXML_EXPERIMENTAL
       else if(Element.Tag() == "barline")
       {
         PartState["must-close-beam"] = false;
         PartState["elements"].Add() = MusicXMLParseBarline(Element);
         PartState["elements"].z()["offset"] = Offset;
       }
+#endif
       else if(Element.Tag() == "direction")
       {
         Value Result = MusicXMLParseDirection(Element);
