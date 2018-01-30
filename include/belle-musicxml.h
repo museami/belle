@@ -564,7 +564,8 @@ Value MusicXMLParseDirection(const Value& Element)
           Value w;
           w["type"] = "expression";
           w["style"] = Element[i][j]["font-style"];
-          w["placement"] = Element[i][j]["default-y"].AsNumber() > 0.f ?
+          w["placement"] = (Element["placement"].AsString() == "above" ||
+            Element[i][j]["default-y"].AsNumber() > 0.f) ?
             mica::Above : mica::Below;
           w["text"] = Element[i][j].Val();
           v["directions"].Add() = w;
