@@ -1136,14 +1136,16 @@ Value MusicXMLParseMeasureElements(const Value& Measure, Value& PartState)
         Offset -= PartState["elements"].z()["duration"].AsRatio();
         Offset = Max(Offset, Ratio(0));
       }
-#ifdef BELLE_MUSICXML_EXPERIMENTAL
       else if(Element.Tag() == "barline")
       {
-        PartState["must-close-beam"] = false;
-        PartState["elements"].Add() = MusicXMLParseBarline(Element);
-        PartState["elements"].z()["offset"] = Offset;
+        Value v = MusicXMLParseBarline(Element);
+        if (mica::Concept(v["style"]) == mica::FinalBarline)
+        {
+          PartState["must-close-beam"] = false;
+          PartState["elements"].Add() = v;
+          PartState["elements"].z()["offset"] = Offset;
+        }
       }
-#endif
       else if(Element.Tag() == "direction")
       {
         Value Result = MusicXMLParseDirection(Element);
