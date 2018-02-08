@@ -830,7 +830,12 @@ Value MusicXMLParseNote(const Value& Element, Value& PartState)
         String tt = Element[i][j].Tag();
         Value  vv = Element[i][j].Val();
         String ty = Element[i][j]["type"].AsString();
-        String nu = Element[i][j]["number"].AsString();
+        Value nuv = Element[i][j]["number"];
+        String nu;
+        if (nuv.IsNil())
+          nu = NoteInfo["pitches"].z().AsString();
+        else
+          nu = nuv.AsString();
         String pl = Element[i][j]["placement"].AsString();
         Value& VoiceSpans = PartState["spans"][tt][NoteInfo["voice"]];
         SpanInfo["placement"] =
