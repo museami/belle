@@ -559,7 +559,7 @@ Value MusicXMLParseDirection(const Value& Element)
       for(count j = 0; Element[i].Contains(j); j++)
       {
         String dt = Element[i][j].Tag();
-        if(dt == "words")
+        if(dt == "words" && Element[i][j]["font-family"].AsString() != "Opus Std")
         {
           Value w;
           w["type"] = "expression";
