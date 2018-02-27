@@ -191,6 +191,11 @@ List<VectorInt> WrapDistributeMeasures(List<number> MeasureWidths,
   typedef Pointer<GraphT<WrapCostLabel>::Object> CostNode;
   typedef Pointer<const GraphT<WrapCostLabel>::Object> ConstCostNode;
 
+  const number MinimumMeasureWidth = 0.00001;
+  for(count i = 0; i < MeasureWidths.n(); i++)
+    if(MeasureWidths[i] < MinimumMeasureWidth)
+      MeasureWidths[i] = MinimumMeasureWidth;
+
   List<VectorInt> Distribution;
   if(MeasureWidths.n() > 0 and MeasureWidths > 0.f and
     FirstLineWidth > 0.f and RemainingLineWidths > 0.f)
